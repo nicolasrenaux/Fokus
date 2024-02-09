@@ -9,6 +9,7 @@ let tarefaSelecionada = null
 let liTarefaSelecionada = null
 
 const btnRemoverConcluidas = document.querySelector('#btn-remover-concluidas')
+const btnRemoverTodas = document.querySelector('#btn-remover-todas')
 
 function atualizarDescricao(){
     localStorage.setItem('tarefas', JSON.stringify(tarefas))
@@ -120,11 +121,19 @@ document.addEventListener('terminou-foco', () => {
     }
 })
 
-btnRemoverConcluidas.onclick = () => {
-    const seletor = '.app__section-task-list-item-complete'
+    const removerTarefas = (somenteCompletas) => {
+    let seletor = somenteCompletas ? '.app__section-task-list-item-complete' : '.app__section-task-list-item'
     document.querySelectorAll(seletor).forEach(elemento => {
         elemento.remove()
     })
-    tarefas = tarefas.filter(tarefa => !tarefa.completa)
+    tarefas = somenteCompletas ? tarefas.filter(tarefa => !tarefa.completa) : []
         atualizarDescricao()
+    }
+
+    btnRemoverConcluidas.onclick = () => {
+        removerTarefas(true)
+    }
+
+    btnRemoverTodas.onclick = () => {
+        removerTarefas(false)
     }
